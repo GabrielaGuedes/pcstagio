@@ -6,11 +6,12 @@ const OurButton = ({
   text,
   fontWeight = "s",
   textColor = "#184932",
+  fontSize,
   onClick
 }) => {
   return (
     <Button style={{ backgroundColor: color }} onClick={onClick}>
-      <div style={{ color: textColor, fontWeight }}>{text}</div>
+      <div style={{ color: textColor, fontWeight, fontSize }}>{text}</div>
     </Button>
   );
 };
