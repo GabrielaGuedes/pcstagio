@@ -2,6 +2,19 @@
 
 .App {
   text-align: center;
+  background-color: #e4f8f5;
+}
+
+a:hover {
+  color: unset;
+}
+
+a {
+  color: unset;
+}
+
+.signinbutton {
+  color: #ffffff;
 }
 
 .App-logo {
