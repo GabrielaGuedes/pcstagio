@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Avatar from './components/ui/avatar';
 
 function App() {
   return (
@@ -18,9 +19,10 @@ function App() {
         >
           Learn React
         </a>
+        <Avatar />
       </header>
     </div>
-  );
+  );  
 }
 
 export default App;
