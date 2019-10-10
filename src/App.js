@@ -1,28 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Avatar from './components/ui/avatar';
+import React, { Fragment } from "react";
+import "./App.css";
+import AvatarWithButton from "./components/ui/avatar-with-button";
+import Navbar from "./components/ui/navbar";
+import OurButton from "./components/ui/our-button";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload!!
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <Avatar />
-      </header>
-    </div>
-  );  
+    <Fragment>
+      <Navbar />
+      <div className="App">
+        <AvatarWithButton
+          src="http://placekitten.com/405/405"
+          nome="Miguel Sarraf"
+        />
+      </div>
+      <OurButton text="skansklo" />
+    </Fragment>
+  );
 }
 
 export default App;
