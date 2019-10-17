@@ -5,14 +5,19 @@ const AvatarWithButton = ({ src, nome, size = 79 }) => {
   return (
     <Fragment>
       <div
-        style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center"
+        }}
       >
         <Avatar src={src} size={size} shape="circle" />
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "flex-end"
+            justifyContent: "flex-end",
+            marginLeft: 10
           }}
         >
           <div style={{ color: "#184932", fontWeight: "600", fontSize: 18 }}>

@@ -4,26 +4,18 @@ import empresa from "./diceless.png";
 
 const OurPanel = ({ content, hiddenContent }) => {
   const [showHiddenContent, setShowHiddenContent] = useState(false);
-  /*const [querotuk, setQuerotuk] = useState(true);
-
-  const onClick = () => {
-    setQuerotuk(!querotuk);
-  };*/
 
   return (
     <Fragment>
-      {/*<div style={{ backgroundColor: "yellow", fontWeight: "600" }}>
-        moana
-        {querotuk ? "tuk" : "sem tuk"}
-  </div>*/}
       <Card
         style={{
           width: 666,
           display: "flex",
           justifyContent: "flex-start",
-          marginTop: 50,
-          marginLeft: 50,
-          padding: "10px 10px 0px"
+          padding: "10px 10px 0px",
+          borderRadius: 4,
+          boxShadow:
+            "0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19)"
         }}
       >
         {content}
@@ -32,16 +24,17 @@ const OurPanel = ({ content, hiddenContent }) => {
         </div>
 
         <br />
-        <Icon
-          type={showHiddenContent ? "arrow-up" : "arrow-down"}
-          onClick={() => {
-            setShowHiddenContent(!showHiddenContent);
-          }}
-        />
+        <div
+          style={{ display: "flex", width: "100%", justifyContent: "center" }}
+        >
+          <Icon
+            type={showHiddenContent ? "arrow-up" : "arrow-down"}
+            onClick={() => {
+              setShowHiddenContent(!showHiddenContent);
+            }}
+          />
+        </div>
       </Card>
-      {/*<Button color="#753437" onClick={onClick}>
-        tuk
-</Button>*/}
     </Fragment>
   );
 };
