@@ -32,7 +32,7 @@ const EdicaoAluno = () => {
           marginTop: "20px",
           marginLeft: "40px",
           marginRight: "40px",
-          paddingBottom: 20
+          paddingBottom: "20px"
         }}
       >
         <div style={{ width: "25%" }}>

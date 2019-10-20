@@ -23,7 +23,10 @@ const AvatarWithButton = ({ src, nome, size = 79 }) => {
           <div style={{ color: "#184932", fontWeight: "600", fontSize: 18 }}>
             {nome}
           </div>
-          <a href="http://placekitten.com/" style={{ fontSize: 14 }}>
+          <a
+            href="http://placekitten.com/"
+            style={{ fontSize: 14, textDecoration: "underline" }}
+          >
             Ver seu perfil
           </a>
         </div>

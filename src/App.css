@@ -2,6 +2,7 @@
 
 .App {
   background-color: #e4f8f5;
+  min-height: 100%;
 }
 
 a:hover {
