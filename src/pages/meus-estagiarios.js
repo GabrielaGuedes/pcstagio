@@ -8,6 +8,7 @@ import moanaInv from "../components/ui/moanaInv.png";
 import tuk from "../components/ui/tuk.jpg";
 import diceless from "../components/ui/diceless.png";
 import { Avatar } from "antd";
+import { Link } from "react-router-dom";
 
 const MeusEstagiarios = () => {
   const empresa = {
@@ -100,18 +101,25 @@ const MeusEstagiarios = () => {
             nome={empresa.nome}
             src={empresa.imagem}
             size={79}
+            pessoa="empresa"
           />
           <br />
-          <OurButton style={{ width: "70%" }} text="Início" />
+          <Link to="/empresa">
+            <OurButton style={{ width: "70%" }} text="Início" />
+          </Link>
           <br />
           <br />
-          <OurButton
-            style={{ width: "70%", backgroundColor: "#AAAAAA" }}
-            text="Meus estágiários"
-          />
+          <Link to="meus-estagiarios">
+            <OurButton
+              style={{ width: "70%", backgroundColor: "#AAAAAA" }}
+              text="Meus estágiários"
+            />
+          </Link>
           <br />
           <br />
-          <OurButton style={{ width: "70%" }} text="Cadastrar vaga" />
+          <Link to="cadastrar-vaga">
+            <OurButton style={{ width: "70%" }} text="Cadastrar vaga" />
+          </Link>
         </div>
         <div
           style={{

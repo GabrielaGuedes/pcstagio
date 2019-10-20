@@ -12,6 +12,7 @@ import sports from "../components/ui/sports.jpg";
 import ashowme from "../components/ui/ashowme.jpg";
 import { Avatar, Input } from "antd";
 import AtribuirNota from "../components/atribuir-nota";
+import { Link } from "react-router-dom";
 
 const InicialProfessor = () => {
   const professor = {
@@ -116,18 +117,25 @@ const InicialProfessor = () => {
             nome={professor.nome}
             src={professor.imagem}
             size={79}
+            pessoa="professor"
           />
           <br />
-          <OurButton
-            style={{ width: "70%", backgroundColor: "#AAAAAA" }}
-            text="Início"
-          />
+          <Link to="/professor">
+            <OurButton
+              style={{ width: "70%", backgroundColor: "#AAAAAA" }}
+              text="Início"
+            />
+          </Link>
           <br />
           <br />
-          <OurButton style={{ width: "70%" }} text="Vagas pendentes" />
+          <Link to="/professor/vagas-pendentes">
+            <OurButton style={{ width: "70%" }} text="Vagas pendentes" />
+          </Link>
           <br />
           <br />
-          <OurButton style={{ width: "70%" }} text="Estágios pendentes" />
+          <Link to="/professor/estagios-pendentes">
+            <OurButton style={{ width: "70%" }} text="Estágios pendentes" />
+          </Link>
         </div>
         <div
           style={{

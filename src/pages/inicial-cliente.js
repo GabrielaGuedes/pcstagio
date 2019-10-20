@@ -7,7 +7,7 @@ import example3 from "../components/ui/example3.png";
 import example4 from "../components/ui/example4.png";
 import example5 from "../components/ui/example5.png";
 import example6 from "../components/ui/example6.png";
-import OurButton from "../components/ui/our-button";
+import { Link } from "react-router-dom";
 
 const Teste = () => {
   return (
@@ -124,19 +124,21 @@ const Teste = () => {
             </Card>
           </div>
         </div>
-        <a
-          className="signinbutton"
-          style={{
-            margin: "70px 500px 100px",
-            backgroundColor: "#6314A0",
-            fontWeight: "700",
-            fontSize: "50px",
-            textColor: "#ffffff",
-            borderRadius: 4
-          }}
-        >
-          Se cadastrar
-        </a>
+        <Link to="/cadastro">
+          <a
+            className="signinbutton"
+            style={{
+              margin: "70px 500px 100px",
+              backgroundColor: "#6314A0",
+              fontWeight: "700",
+              fontSize: "50px",
+              textColor: "#ffffff",
+              borderRadius: 4
+            }}
+          >
+            Se cadastrar
+          </a>
+        </Link>
       </center>
     </Fragment>
   );
