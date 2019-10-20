@@ -24,7 +24,7 @@ const OurPanel = ({ content, hiddenContent }) => {
         </div>
 
         <br />
-        <div
+        {hiddenContent && (<div
           style={{ display: "flex", width: "100%", justifyContent: "center" }}
         >
           <Icon
@@ -33,7 +33,7 @@ const OurPanel = ({ content, hiddenContent }) => {
               setShowHiddenContent(!showHiddenContent);
             }}
           />
-        </div>
+        </div>)}
       </Card>
     </Fragment>
   );

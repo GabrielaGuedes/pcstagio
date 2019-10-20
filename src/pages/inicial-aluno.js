@@ -220,7 +220,10 @@ const InicialAluno = () => {
         <div style={{ width: "25%", marginRight: 20 }}>
           <AvatarWithButton nome={aluno.nome} src={aluno.imagem} size={79} />
           <br />
-          <OurButton style={{ width: "70%" }} text="Início" />
+          <OurButton
+            style={{ width: "70%", backgroundColor: "#AAAAAA" }}
+            text="Início"
+          />
           <br />
           <br />
           <OurButton style={{ width: "70%" }} text="Meus estágios" />
