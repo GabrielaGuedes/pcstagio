@@ -3,6 +3,7 @@ import diceless from "../components/ui/diceless.png";
 import AvatarWithButton from "../components/ui/avatar-with-button";
 import { Card, Input } from "antd";
 import OurButton from "../components/ui/our-button";
+import { Link } from "react-router-dom";
 
 const PerfilEdicaoEmpresa = () => {
   const dados = {
@@ -31,15 +32,25 @@ const PerfilEdicaoEmpresa = () => {
         }}
       >
         <div style={{ width: "25%" }}>
-          <AvatarWithButton src={diceless} nome={dados.nome}></AvatarWithButton>
+          <AvatarWithButton
+            src={diceless}
+            nome={dados.nome}
+            pessoa="empresa"
+          ></AvatarWithButton>
           <br />
-          <OurButton style={{ width: "70%" }} text="Início" />
+          <Link to="/empresa">
+            <OurButton style={{ width: "70%" }} text="Início" />
+          </Link>
           <br />
           <br />
-          <OurButton style={{ width: "70%" }} text="Meus estágiários" />
+          <Link to="/empresa/meus-estagiarios">
+            <OurButton style={{ width: "70%" }} text="Meus estágiários" />
+          </Link>
           <br />
           <br />
-          <OurButton style={{ width: "70%" }} text="Cadastrar vaga" />
+          <Link to="/empresa/cadastrar-vaga">
+            <OurButton style={{ width: "70%" }} text="Cadastrar vaga" />
+          </Link>
         </div>
         <div style={{ width: "75%", marginLeft: "20px" }}>
           <div style={{ display: "flex", flexDirection: "row" }}>
@@ -53,17 +64,19 @@ const PerfilEdicaoEmpresa = () => {
                 fontSize: "20px"
               }}
             >
-              <OurButton
-                style={{
-                  marginRight: "100px",
-                  width: "40%",
-                  backgroundColor: "#6314A0"
-                }}
-                text="Salvar"
-                textColor="white"
-                fontSize="20px"
-                fontWeight="bold"
-              ></OurButton>
+              <Link to="/empresa/perfil">
+                <OurButton
+                  style={{
+                    marginRight: "100px",
+                    width: "40%",
+                    backgroundColor: "#6314A0"
+                  }}
+                  text="Salvar"
+                  textColor="white"
+                  fontSize="20px"
+                  fontWeight="bold"
+                ></OurButton>
+              </Link>
             </div>
           </div>
           <Card style={{ marginRight: "100px" }}>

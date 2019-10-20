@@ -3,6 +3,7 @@ import diceless from "../components/ui/diceless-logo.png";
 import AvatarWithButton from "../components/ui/avatar-with-button";
 import { Button, Icon, Card } from "antd";
 import OurButton from "../components/ui/our-button";
+import { Link } from "react-router-dom";
 
 const PerfilEmpresa = () => {
   const dados = {
@@ -29,12 +30,26 @@ const PerfilEmpresa = () => {
         }}
       >
         <div style={{ width: "25%" }}>
-          <AvatarWithButton src={diceless} nome={dados.nome}></AvatarWithButton>
+          <AvatarWithButton
+            nome={dados.nome}
+            src={diceless}
+            size={79}
+            pessoa="empresa"
+          />
           <br />
-          <OurButton style={{ width: "70%" }} text="Início"></OurButton>
+          <Link to="/empresa">
+            <OurButton style={{ width: "70%" }} text="Início" />
+          </Link>
           <br />
           <br />
-          <OurButton style={{ width: "70%" }} text="Meus arquivos"></OurButton>
+          <Link to="meus-estagiarios">
+            <OurButton style={{ width: "70%" }} text="Meus estágiários" />
+          </Link>
+          <br />
+          <br />
+          <Link to="cadastrar-vaga">
+            <OurButton style={{ width: "70%" }} text="Cadastrar vaga" />
+          </Link>
         </div>
         <div style={{ width: "75%" }}>
           <div style={{ display: "flex", flexDirection: "row" }}>
@@ -49,12 +64,9 @@ const PerfilEmpresa = () => {
               }}
             >
               <Icon type="edit"></Icon>
-              <a
-                href="http://www.staggeringbeauty.com/"
-                style={{ marginRight: "100px" }}
-              >
+              <Link to="perfil/edicao" style={{ marginRight: "100px" }}>
                 Editar
-              </a>
+              </Link>
             </div>
           </div>
           <Card style={{ marginRight: "100px" }}>

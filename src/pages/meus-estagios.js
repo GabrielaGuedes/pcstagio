@@ -8,6 +8,7 @@ import buy4me from "../components/ui/buy4me.png";
 import sports from "../components/ui/sports.jpg";
 import ashowme from "../components/ui/ashowme.jpg";
 import { Avatar } from "antd";
+import { Link } from "react-router-dom";
 
 const MeusEstagios = () => {
   const aluno = {
@@ -96,15 +97,25 @@ const MeusEstagios = () => {
     <Fragment>
       <div style={{ display: "flex", margin: "20px 40px 0px" }}>
         <div style={{ width: "25%", marginRight: 20 }}>
-          <AvatarWithButton nome={aluno.nome} src={aluno.imagem} size={79} />
-          <br />
-          <OurButton style={{ width: "70%" }} text="Início" />
-          <br />
-          <br />
-          <OurButton
-            style={{ width: "70%", backgroundColor: "#AAAAAA" }}
-            text="Meus estágios"
+          <AvatarWithButton
+            nome={aluno.nome}
+            src={aluno.imagem}
+            size={79}
+            pessoa="aluno"
           />
+          <br />
+          <Link to="/aluno">
+            <OurButton style={{ width: "70%" }} text="Início" />
+          </Link>
+          <br />
+          <br />
+
+          <Link to="/aluno/meus-estagios">
+            <OurButton
+              style={{ width: "70%", backgroundColor: "#AAAAAA" }}
+              text="Meus estágios"
+            />
+          </Link>
         </div>
         <div
           style={{

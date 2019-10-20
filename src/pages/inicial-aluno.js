@@ -8,6 +8,7 @@ import sports from "../components/ui/sports.jpg";
 import ashowme from "../components/ui/ashowme.jpg";
 import OurButton from "../components/ui/our-button";
 import Text from "antd/lib/typography/Text";
+import { Link } from "react-router-dom";
 
 const InicialAluno = () => {
   const [aluno, setAluno] = useState({
@@ -218,15 +219,24 @@ const InicialAluno = () => {
     <Fragment>
       <div style={{ display: "flex", margin: "20px 40px 0px" }}>
         <div style={{ width: "25%", marginRight: 20 }}>
-          <AvatarWithButton nome={aluno.nome} src={aluno.imagem} size={79} />
-          <br />
-          <OurButton
-            style={{ width: "70%", backgroundColor: "#AAAAAA" }}
-            text="Início"
+          <AvatarWithButton
+            nome={aluno.nome}
+            src={aluno.imagem}
+            size={79}
+            pessoa="aluno"
           />
           <br />
+          <Link to="/aluno">
+            <OurButton
+              style={{ width: "70%", backgroundColor: "#AAAAAA" }}
+              text="Início"
+            />
+          </Link>
           <br />
-          <OurButton style={{ width: "70%" }} text="Meus estágios" />
+          <br />
+          <Link to="/aluno/meus-estagios">
+            <OurButton style={{ width: "70%" }} text="Meus estágios" />
+          </Link>
         </div>
         <div
           style={{

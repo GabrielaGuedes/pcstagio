@@ -1,7 +1,8 @@
 import React from "react";
 import pcstagiologo from "./pcstagiologo.png";
+import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ inicial }) => {
   return (
     <div
       style={{
@@ -13,7 +14,7 @@ const Navbar = () => {
       }}
     >
       <img src={pcstagiologo} alt="logo" />
-      <a href="https://placekitten.com">Log out</a>
+      <Link to="/cadastro">{inicial ? "Log in" : "Log out"}</Link>
     </div>
   );
 };

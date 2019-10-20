@@ -8,6 +8,7 @@ import moana from "../components/ui/moana.png";
 import tuk from "../components/ui/tuk.jpg";
 import tukInv from "../components/ui/tukInv.jpg";
 import moanaInv from "../components/ui/moanaInv.png";
+import { Link } from "react-router-dom";
 
 const EmpresaCandidatos = () => {
   const empresa = {
@@ -119,15 +120,22 @@ const EmpresaCandidatos = () => {
             nome={empresa.nome}
             src={empresa.imagem}
             size={79}
+            pessoa="empresa"
           />
           <br />
-          <OurButton style={{ width: "70%" }} text="Início" />
+          <Link to="/empresa">
+            <OurButton style={{ width: "70%" }} text="Início" />
+          </Link>
           <br />
           <br />
-          <OurButton style={{ width: "70%" }} text="Meus estágiários" />
+          <Link to="meus-estagiarios">
+            <OurButton style={{ width: "70%" }} text="Meus estágiários" />
+          </Link>
           <br />
           <br />
-          <OurButton style={{ width: "70%" }} text="Cadastrar vaga" />
+          <Link to="cadastrar-vaga">
+            <OurButton style={{ width: "70%" }} text="Cadastrar vaga" />
+          </Link>
         </div>
         <div style={{ width: "75%", marginBottom: "30px" }}>
           <div style={{ width: "100%" }}>

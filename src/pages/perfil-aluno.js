@@ -1,8 +1,9 @@
 import React, { Fragment } from "react";
 import moana from "../components/ui/moana.jpg";
 import AvatarWithButton from "../components/ui/avatar-with-button";
-import { Button, Icon, Card } from "antd";
+import { Icon, Card } from "antd";
 import OurButton from "../components/ui/our-button";
+import { Link } from "react-router-dom";
 
 const PerfilAluno = () => {
   const dados = {
@@ -34,12 +35,23 @@ const PerfilAluno = () => {
         }}
       >
         <div style={{ width: "25%" }}>
-          <AvatarWithButton src={moana} nome={dados.nome}></AvatarWithButton>
+          <AvatarWithButton
+            src={moana}
+            nome={dados.nome}
+            pessoa="aluno"
+          ></AvatarWithButton>
           <br />
-          <OurButton style={{ width: "70%" }} text="Início"></OurButton>
+          <Link to="/aluno">
+            <OurButton style={{ width: "70%" }} text="Início"></OurButton>
+          </Link>
           <br />
           <br />
-          <OurButton style={{ width: "70%" }} text="Meus arquivos"></OurButton>
+          <Link to="/aluno/meus-estagios">
+            <OurButton
+              style={{ width: "70%" }}
+              text="Meus estágios"
+            ></OurButton>
+          </Link>
         </div>
         <div style={{ width: "75%" }}>
           <div style={{ display: "flex", flexDirection: "row" }}>
@@ -54,12 +66,9 @@ const PerfilAluno = () => {
               }}
             >
               <Icon type="edit"></Icon>
-              <a
-                href="http://www.staggeringbeauty.com/"
-                style={{ marginRight: "100px" }}
-              >
+              <Link to="/aluno/perfil/edicao" style={{ marginRight: "100px" }}>
                 Editar
-              </a>
+              </Link>
             </div>
           </div>
           <Card style={{ marginRight: "100px" }}>

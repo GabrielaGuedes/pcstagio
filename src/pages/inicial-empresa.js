@@ -5,6 +5,7 @@ import diceless from "../components/ui/diceless-logo.png";
 import OurButton from "../components/ui/our-button";
 import Text from "antd/lib/typography/Text";
 import BotaoVerCandidatos from "../components/botao-ver-candidatos";
+import { Link } from "react-router-dom";
 
 const InicialEmpresa = () => {
   const empresa = {
@@ -171,18 +172,25 @@ const InicialEmpresa = () => {
             nome={empresa.nome}
             src={empresa.imagem}
             size={79}
+            pessoa="empresa"
           />
           <br />
-          <OurButton
-            style={{ width: "70%", backgroundColor: "#AAAAAA" }}
-            text="Início"
-          />
+          <Link to="/empresa">
+            <OurButton
+              style={{ width: "70%", backgroundColor: "#AAAAAA" }}
+              text="Início"
+            />
+          </Link>
           <br />
           <br />
-          <OurButton style={{ width: "70%" }} text="Meus estágiários" />
+          <Link to="/empresa/meus-estagiarios">
+            <OurButton style={{ width: "70%" }} text="Meus estágiários" />
+          </Link>
           <br />
           <br />
-          <OurButton style={{ width: "70%" }} text="Cadastrar vaga" />
+          <Link to="/empresa/cadastrar-vaga">
+            <OurButton style={{ width: "70%" }} text="Cadastrar vaga" />
+          </Link>
         </div>
         <div
           style={{

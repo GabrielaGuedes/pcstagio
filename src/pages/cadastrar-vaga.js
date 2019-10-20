@@ -3,6 +3,7 @@ import diceless from "../components/ui/diceless.png";
 import AvatarWithButton from "../components/ui/avatar-with-button";
 import { Card, Input } from "antd";
 import OurButton from "../components/ui/our-button";
+import { Link } from "react-router-dom";
 
 const CadastrarVaga = () => {
   const dados = {
@@ -31,18 +32,24 @@ const CadastrarVaga = () => {
         }}
       >
         <div style={{ width: "25%" }}>
-          <AvatarWithButton src={diceless} nome={dados.nome}></AvatarWithButton>
+          <AvatarWithButton src={diceless} nome={dados.nome} pessoa="empresa" />
           <br />
-          <OurButton style={{ width: "70%" }} text="Início" />
+          <Link to="/empresa">
+            <OurButton style={{ width: "70%" }} text="Início" />
+          </Link>
           <br />
           <br />
-          <OurButton style={{ width: "70%" }} text="Meus estágiários" />
+          <Link to="meus-estagiarios">
+            <OurButton style={{ width: "70%" }} text="Meus estágiários" />
+          </Link>
           <br />
           <br />
-          <OurButton
-            style={{ width: "70%", backgroundColor: "#AAAAAA" }}
-            text="Cadastrar vaga"
-          />
+          <Link to="cadastrar-vaga">
+            <OurButton
+              style={{ width: "70%", backgroundColor: "#AAAAAA" }}
+              text="Cadastrar vaga"
+            />
+          </Link>
         </div>
         <div style={{ width: "75%", marginLeft: "20px" }}>
           <div style={{ display: "flex", flexDirection: "row" }}>

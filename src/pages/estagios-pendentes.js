@@ -11,6 +11,7 @@ import moana from "../components/ui/moana.png";
 import tuk from "../components/ui/tuk.jpg";
 import tukInv from "../components/ui/tukInv.jpg";
 import moanaInv from "../components/ui/moanaInv.png";
+import { Link } from "react-router-dom";
 
 const EstagiosPendentes = () => {
   const professor = {
@@ -177,18 +178,25 @@ const EstagiosPendentes = () => {
             nome={professor.nome}
             src={professor.imagem}
             size={79}
+            pessoa="professor"
           />
           <br />
-          <OurButton style={{ width: "70%" }} text="Início" />
+          <Link to="/professor">
+            <OurButton style={{ width: "70%" }} text="Início" />
+          </Link>
           <br />
           <br />
-          <OurButton style={{ width: "70%" }} text="Vagas pendentes" />
+          <Link to="vagas-pendentes">
+            <OurButton style={{ width: "70%" }} text="Vagas pendentes" />
+          </Link>
           <br />
           <br />
-          <OurButton
-            style={{ width: "70%", backgroundColor: "#AAAAAA" }}
-            text="Estágios pendentes"
-          />
+          <Link to="estagios-pendentes">
+            <OurButton
+              style={{ width: "70%", backgroundColor: "#AAAAAA" }}
+              text="Estágios pendentes"
+            />
+          </Link>
         </div>
         <div style={{ width: "75%", marginBottom: "30px" }}>
           <div style={{ width: "100%" }}>

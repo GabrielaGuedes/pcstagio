@@ -2,9 +2,23 @@ import React, { Fragment, useState } from "react";
 import pcstagiologo from "../components/ui/pcstagiologo.png";
 import { Input, Radio } from "antd";
 import OurButton from "../components/ui/our-button";
+import { Link } from "react-router-dom";
 
 const InicialCadastro = () => {
-  const [valor, setValor] = useState("");
+  const [login, setLogin] = useState("");
+  const linkTo = () => {
+    switch (login) {
+      case "aluno":
+        return "/aluno";
+      case "empresa":
+        return "/empresa";
+      case "professor":
+        return "/professor";
+      default:
+        return "/cadastro";
+    }
+  };
+
   return (
     <Fragment>
       <div
@@ -18,7 +32,11 @@ const InicialCadastro = () => {
       >
         <img src={pcstagiologo} alt="logo" />
         <div style={{ display: "flex", flexDirection: "row", marginRight: 30 }}>
-          <Input placeholder="login" />
+          <Input
+            placeholder="login"
+            value={login}
+            onChange={e => setLogin(e.target.value)}
+          />
           <div
             style={{
               marginLeft: 15,
@@ -31,7 +49,9 @@ const InicialCadastro = () => {
             <Input placeholder="senha" />
             <div style={{ textDecoration: "underline" }}>Esqueceu a senha?</div>
           </div>
-          <OurButton text="Entrar" textColor="#ffffff" color="#6314A0" />
+          <Link to={linkTo()}>
+            <OurButton text="Entrar" textColor="#ffffff" color="#6314A0" />
+          </Link>
         </div>
       </div>
       <div

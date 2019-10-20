@@ -7,6 +7,7 @@ import buy4me from "../components/ui/buy4me.png";
 import sports from "../components/ui/sports.jpg";
 import ashowme from "../components/ui/ashowme.jpg";
 import AprovarRejeitar from "../components/aprovar-rejeitar";
+import { Link } from "react-router-dom";
 
 const VagasPendentes = () => {
   const professor = {
@@ -118,18 +119,25 @@ const VagasPendentes = () => {
             nome={professor.nome}
             src={professor.imagem}
             size={79}
+            pessoa="professor"
           />
           <br />
-          <OurButton style={{ width: "70%" }} text="Início" />
+          <Link to="/professor">
+            <OurButton style={{ width: "70%" }} text="Início" />
+          </Link>
           <br />
           <br />
-          <OurButton
-            style={{ width: "70%", backgroundColor: "#AAAAAA" }}
-            text="Vagas pendentes"
-          />
+          <Link to="vagas-pendentes">
+            <OurButton
+              style={{ width: "70%", backgroundColor: "#AAAAAA" }}
+              text="Vagas pendentes"
+            />
+          </Link>
           <br />
           <br />
-          <OurButton style={{ width: "70%" }} text="Estágios pendentes" />
+          <Link to="estagios-pendentes">
+            <OurButton style={{ width: "70%" }} text="Estágios pendentes" />
+          </Link>
         </div>
         <div style={{ width: "75%", marginBottom: "30px" }}>
           <div style={{ width: "100%" }}>

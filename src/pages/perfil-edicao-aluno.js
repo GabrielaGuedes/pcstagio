@@ -3,6 +3,7 @@ import moana from "../components/ui/moana.jpg";
 import AvatarWithButton from "../components/ui/avatar-with-button";
 import { Card, Input } from "antd";
 import OurButton from "../components/ui/our-button";
+import { Link } from "react-router-dom";
 
 const EdicaoAluno = () => {
   const dados = {
@@ -36,12 +37,23 @@ const EdicaoAluno = () => {
         }}
       >
         <div style={{ width: "25%" }}>
-          <AvatarWithButton src={moana} nome={dados.nome}></AvatarWithButton>
+          <AvatarWithButton
+            src={moana}
+            nome={dados.nome}
+            pessoa="aluno"
+          ></AvatarWithButton>
           <br />
-          <OurButton style={{ width: "70%" }} text="Início"></OurButton>
+          <Link to="/aluno">
+            <OurButton style={{ width: "70%" }} text="Início"></OurButton>
+          </Link>
           <br />
           <br />
-          <OurButton style={{ width: "70%" }} text="Meus estágios"></OurButton>
+          <Link to="/aluno/meus-estagios">
+            <OurButton
+              style={{ width: "70%" }}
+              text="Meus estágios"
+            ></OurButton>
+          </Link>
         </div>
         <div style={{ width: "75%", marginLeft: "20px" }}>
           <div style={{ display: "flex", flexDirection: "row" }}>
@@ -55,17 +67,19 @@ const EdicaoAluno = () => {
                 fontSize: "20px"
               }}
             >
-              <OurButton
-                style={{
-                  marginRight: "100px",
-                  width: "40%",
-                  backgroundColor: "#6314A0"
-                }}
-                text="Salvar"
-                textColor="white"
-                fontSize="20px"
-                fontWeight="bold"
-              ></OurButton>
+              <Link to="/aluno/perfil">
+                <OurButton
+                  style={{
+                    marginRight: "100px",
+                    width: "40%",
+                    backgroundColor: "#6314A0"
+                  }}
+                  text="Salvar"
+                  textColor="white"
+                  fontSize="20px"
+                  fontWeight="bold"
+                />
+              </Link>
             </div>
           </div>
           <Card style={{ marginRight: "100px" }}>
