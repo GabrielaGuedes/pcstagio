@@ -7,7 +7,7 @@ import moana from "../components/ui/moana.png";
 import moanaInv from "../components/ui/moanaInv.png";
 import tuk from "../components/ui/tuk.jpg";
 import diceless from "../components/ui/diceless.png";
-import { Avatar } from "antd";
+import { Avatar, Upload } from "antd";
 import { Link } from "react-router-dom";
 
 const MeusEstagiarios = () => {
@@ -81,12 +81,14 @@ const MeusEstagiarios = () => {
               justifyContent: "flex-end"
             }}
           >
-            <OurButton
-              fontWeight={600}
-              color="#99D5CA"
-              text="Enviar relatório"
-              textColor="#184932"
-            />
+            <Upload>
+              <OurButton
+                fontWeight={600}
+                color="#99D5CA"
+                text="Enviar relatório"
+                textColor="#184932"
+              />
+            </Upload>
           </div>
         </div>
       </div>

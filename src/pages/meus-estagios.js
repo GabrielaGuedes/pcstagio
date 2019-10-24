@@ -7,7 +7,7 @@ import moana from "../components/ui/moana.png";
 import buy4me from "../components/ui/buy4me.png";
 import sports from "../components/ui/sports.jpg";
 import ashowme from "../components/ui/ashowme.jpg";
-import { Avatar } from "antd";
+import { Avatar, Upload } from "antd";
 import { Link } from "react-router-dom";
 
 const MeusEstagios = () => {
@@ -81,12 +81,14 @@ const MeusEstagios = () => {
               justifyContent: "flex-end"
             }}
           >
-            <OurButton
-              fontWeight={600}
-              color="#99D5CA"
-              text="Enviar relatório"
-              textColor="#184932"
-            />
+            <Upload>
+              <OurButton
+                fontWeight={600}
+                color="#99D5CA"
+                text="Enviar relatório"
+                textColor="#184932"
+              />
+            </Upload>
           </div>
         </div>
       </div>

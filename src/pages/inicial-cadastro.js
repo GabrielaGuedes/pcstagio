@@ -30,7 +30,7 @@ const InicialCadastro = () => {
           alignItems: "center"
         }}
       >
-        <img src={pcstagiologo} alt="logo" />
+        <img src={pcstagiologo} alt="logo" height={50} width={150} />
         <div style={{ display: "flex", flexDirection: "row", marginRight: 30 }}>
           <Input
             placeholder="login"
@@ -46,7 +46,7 @@ const InicialCadastro = () => {
               width: "100%"
             }}
           >
-            <Input placeholder="senha" />
+            <Input.Password placeholder="senha" />
             <div style={{ textDecoration: "underline" }}>Esqueceu a senha?</div>
           </div>
           <Link to={linkTo()}>
