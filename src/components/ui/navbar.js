@@ -13,7 +13,7 @@ const Navbar = ({ inicial }) => {
         alignItems: "center"
       }}
     >
-      <img src={pcstagiologo} alt="logo" />
+      <img src={pcstagiologo} alt="logo" height={50} width={150} />
       <Link to="/cadastro">{inicial ? "Log in" : "Log out"}</Link>
     </div>
   );
