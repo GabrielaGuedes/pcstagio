@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class Relatorio(Base):
-    __tablename__ = 'relatorio'
+    __tablename__ = 'relatorios'
     idRelatorio = db.Column(db.Integer, primary_key=True)
     nota = db.Column(db.Integer)
     dataSubmissao = db.Column(db.DateTime)

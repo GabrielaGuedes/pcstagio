@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class Empresa(Base):
-    __tablename__ = 'empresa'
+    __tablename__ = 'empresas'
     cnpj = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(200))
     email = db.Column(db.string(40), unique=True)

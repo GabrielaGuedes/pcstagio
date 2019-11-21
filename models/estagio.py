@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class Estagio(Base):
-    __tablename__ = 'estagio'
+    __tablename__ = 'estagios'
     nome = db.Column(db.String(200))
     idEstagio = db.Column(db.Integer, primary_key=True)
     inicio = db.Column(db.DateTime)
