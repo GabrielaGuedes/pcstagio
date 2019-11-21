@@ -12,15 +12,15 @@ class Estagio(Base):
     aprovadoParaIniciar = db.Column(db.Boolean)
     empresaCnpj = db.Column(db.Integer, db.ForeignKey(
         'empresa.cnpj'), primary_key=True)
-    empresa = db.relationship("Empresa", back_populates="estagio")
+    empresa = db.relationship("Empresa", back_populates="estagios")
     alunoNusp = db.Column(db.Integer, db.ForeignKey(
         'aluno.nusp'), primary_key=True)
-    aluno = db.relationship("Aluno", back_populates="estagio")
+    aluno = db.relationship("Aluno", back_populates="estagios")
     relatorioAluno = db.Column(db.Integer, db.ForeignKey(
         'relatorio.idRelatorio'), primary_key=True)
     relatorioEmpresa = db.Column(db.Integer, db.ForeignKey(
         'relatorio.idRelatorio'), primary_key=True)
-    relatorio = db.relationship("Relatorio", back_populates="estagio")
+    relatorio = db.relationship("Relatorio", back_populates="estagios")
 
     def __init__(self, nome, idEstagio):
         self.nome = nome

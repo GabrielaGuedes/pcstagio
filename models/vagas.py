@@ -17,10 +17,10 @@ class Vagas(Base):
     dataCadastro = db.Column(db.DateTime)
     empresaCnpj = db.Column(db.Integer, db.ForeignKey(
         'empresa.cnpj'), primary_key=True)
-    empresa = db.relationship("Empresa", back_populates="estagio")
+    empresa = db.relationship("Empresa", back_populates="vagas")
     alunoNusp = db.Column(db.Integer, db.ForeignKey(
         'aluno.nusp'), primary_key=True)
-    aluno = db.relationship("Aluno", back_populates="estagio")
+    aluno = db.relationship("Aluno", back_populates="vagas")
 
     def __init__(self, nome, idVaga):
         self.nome = nome

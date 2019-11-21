@@ -12,6 +12,7 @@ class Professor(Base):
     # listas = db.relationship("ItemLista", back_populates="item")
 
     # estagios
+    # estagios pendentes
     # relatorios
     # vagas pendentes
 

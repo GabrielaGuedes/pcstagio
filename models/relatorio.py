@@ -8,13 +8,13 @@ class Relatorio(Base):
     nota = db.Column(db.Integer)
     dataSubmissao = db.Column(db.DateTime)
     estagioId = db.Column(db.Integer, db.ForeignKey('estagio.idEstagio'))
-    estagio = db.relationship("Estagio", back_populates="relatorio")
+    estagio = db.relationship("Estagio", back_populates="relatorios")
     empresaCnpj = db.Column(db.Integer, db.ForeignKey(
         'empresa.cnpj'), primary_key=True)
-    empresa = db.relationship("Empresa", back_populates="estagio")
+    empresa = db.relationship("Empresa", back_populates="relatorios")
     alunoNusp = db.Column(db.Integer, db.ForeignKey(
         'aluno.nusp'), primary_key=True)
-    aluno = db.relationship("Aluno", back_populates="estagio")
+    aluno = db.relationship("Aluno", back_populates="relatorios")
 
     def __init__(self, idRelatorio):
         self.idRelatorio = idRelatorio
