@@ -22,9 +22,10 @@ class Vagas(Base):
         'aluno.nusp'), primary_key=True)
     aluno = db.relationship("Aluno", back_populates="vagas")
 
-    def __init__(self, nome, idVaga):
+    def __init__(self, nome, idVaga, empresa):
         self.nome = nome
         self.idVaga = idVaga
+        self.empresa = empresa
         self.dataCadastro = datetime.now()
 
     def adicionar(self):
