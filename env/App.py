@@ -1,0 +1,381 @@
+from flask import Flask, request, jsonify
+from dao import db, Base
+from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
+from marshmallow import fields
+import os
+
+
+app = Flask(__name__)
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
+    os.path.join(basedir, 'pcstagio.sqlite')
+
+# Order matters: Initialize SQLAlchemy before Marshmallow
+db = SQLAlchemy(app)
+ma = Marshmallow(app)
+
+
+class Aluno(Base):
+    __tablename__ = 'alunos'
+    nusp = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(200))
+    cpf = db.Column(db.String(30), unique=True)
+    curso = db.Column(db.String(30))
+    ano = db.Column(db.Integer)
+    telefone = db.Column(db.String(10))
+    email = db.Column(db.String(40), unique=True)
+    data_nasc = db.Column(db.DateTime)
+    endereco = db.Column(db.String(50))
+    curriculo = db.Column(db.text)
+
+    # listas = db.relationship("ItemLista", back_populates="item")
+
+    # estagios
+    # relatorios
+    # vagas candidatados
+
+    def __init__(self, nome, nusp):
+        self.nome = nome
+        self.nusp = nusp
+
+
+class Empresa(Base):
+    __tablename__ = 'empresas'
+    cnpj = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(200))
+    email = db.Column(db.String(40), unique=True)
+    endereco = db.Column(db.String(50))
+    valores = db.Column(db.text)
+    dataCadastro = db.Column(db.DateTime)
+
+    # listas = db.relationship("ItemLista", back_populates="item")
+
+    # estagios
+    # relatorios
+    # vagas cadastradas
+
+    def __init__(self, nome, cnpj):
+        self.nome = nome
+        self.cnpj = cnpj
+        self.dataCadastro = datetime.now()
+
+    def adicionar(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+class Estagio(Base):
+    __tablename__ = 'estagios'
+    nome = db.Column(db.String(200))
+    idEstagio = db.Column(db.Integer, primary_key=True)
+    inicio = db.Column(db.DateTime)
+    fim = db.Column(db.DateTime)
+    duracaoMeses = db.Column(db.Integer)
+    aprovadoParaIniciar = db.Column(db.Boolean)
+    empresaCnpj = db.Column(db.Integer, db.ForeignKey(
+        'empresa.cnpj'), primary_key=True)
+    empresa = db.relationship("Empresa", back_populates="estagios")
+    alunoNusp = db.Column(db.Integer, db.ForeignKey(
+        'aluno.nusp'), primary_key=True)
+    aluno = db.relationship("Aluno", back_populates="estagios")
+    relatorioAluno = db.Column(db.Integer, db.ForeignKey(
+        'relatorio.idRelatorio'), primary_key=True)
+    relatorioEmpresa = db.Column(db.Integer, db.ForeignKey(
+        'relatorio.idRelatorio'), primary_key=True)
+    relatorio = db.relationship("Relatorio", back_populates="estagios")
+
+    def __init__(self, nome, idEstagio):
+        self.nome = nome
+        self.idEstagio = idEstagio
+        self.inicio = datetime.now()
+
+
+class Vagas(Base):
+    __tablename__ = 'vagas'
+    nome = db.Column(db.String(200))
+    idVaga = db.Column(db.Integer, primary_key=True)
+    area = db.Column(db.String(50))
+    beneficios = db.Column(db.text)
+    remuneracao = db.Column(db.String(20))
+    requisitos = db.Column(db.text)
+    etapasProc = db.Column(db.text)
+    descricao = db.Column(db.text)
+    duracaoMeses = db.Column(db.Integer)
+    aprovadaParaDivulgar = db.Column(db.Boolean)
+    dataCadastro = db.Column(db.DateTime)
+    empresaCnpj = db.Column(db.Integer, db.ForeignKey(
+        'empresa.cnpj'), primary_key=True)
+    empresa = db.relationship("Empresa", back_populates="vagas")
+    alunoNusp = db.Column(db.Integer, db.ForeignKey(
+        'aluno.nusp'), primary_key=True)
+    aluno = db.relationship("Aluno", back_populates="vagas")
+
+    def __init__(self, nome, idVaga, empresa):
+        self.nome = nome
+        self.idVaga = idVaga
+        self.empresa = empresa
+        self.dataCadastro = datetime.now()
+
+
+class Relatorio(Base):
+    __tablename__ = 'relatorios'
+    idRelatorio = db.Column(db.Integer, primary_key=True)
+    nota = db.Column(db.Integer)
+    dataSubmissao = db.Column(db.DateTime)
+    estagioId = db.Column(db.Integer, db.ForeignKey('estagio.idEstagio'))
+    estagio = db.relationship("Estagio", back_populates="relatorios")
+    empresaCnpj = db.Column(db.Integer, db.ForeignKey(
+        'empresa.cnpj'), primary_key=True)
+    empresa = db.relationship("Empresa", back_populates="relatorios")
+    alunoNusp = db.Column(db.Integer, db.ForeignKey(
+        'aluno.nusp'), primary_key=True)
+    aluno = db.relationship("Aluno", back_populates="relatorios")
+
+    def __init__(self, idRelatorio):
+        self.idRelatorio = idRelatorio
+        self.dataSubmissao = datetime.now()
+
+
+class Professor(Base):
+    __tablename__ = 'professores'
+    cpf = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(200))
+    email = db.Column(db.String(40), unique=True)
+    dataCadastro = db.Column(db.DateTime)
+
+    # listas = db.relationship("ItemLista", back_populates="item")
+
+    # estagios
+    # estagios pendentes
+    # relatorios
+    # vagas pendentes
+
+    def __init__(self, nome, cpf):
+        self.nome = nome
+        self.cpf = cpf
+        self.dataCadastro = datetime.now()
+
+
+class ProfessorSchema(ma.ModelSchema):
+    estagios = fields.Nested('EstagiosSchema', many=True)
+    estagiosPendentes = fields.Nested('EstagiosSchema', many=True)
+    relatorios = fields.Nested('RelatoriosSchema', many=True)
+    vagasPendentes = fields.Nested('VagasSchema', many=True)
+
+    class Meta:
+        model = Professor
+        fields = ('cpf', 'nome', 'email', 'dataCadastro')
+
+
+professor_schema = ProfessorSchema()
+professor_schema = ProfessorSchema(many=True)
+
+
+class RelatorioSchema(ma.ModelSchema):
+    empresa = fields.Nested('EmpresaSchema', many=False)
+    aluno = fields.Nested('AlunoSchema', many=False)
+    estagio = fields.Nested('EstagioSchema', many=False)
+
+    class Meta:
+        model = Relatorio
+        fields = ('idRelatorio', 'nota', 'dataSubmissao', 'estagioId',
+                  'estagio', 'empresaCnpj', 'empresa', 'alunoNusp', 'aluno')
+
+
+relatorio_schema = RelatorioSchema()
+relatorios_schema = RelatorioSchema(many=True)
+
+
+class VagaSchema(ma.ModelSchema):
+    empresa = fields.Nested('EmpresaSchema', many=False)
+    alunos = fields.Nested('AlunoSchema', many=True)
+
+    class Meta:
+        model = Vagas
+        fields = ('nome', 'idVaga', 'area', 'beneficios', 'remuneracao', 'requisitos', 'etapasProc', 'descricao',
+                  'duracaoMeses', 'aprovadaParaDivulgar', 'dataCadastro', 'empresaCnpj', 'empresa', 'alunoNusp', 'aluno')
+
+
+vaga_schema = VagaSchema()
+vagas_schema = VagaSchema(many=True)
+
+
+class AlunoSchema(ma.ModelSchema):
+    estagios = fields.Nested('EstagiosSchema', many=True)
+    relatorios = fields.Nested('RelatoriosSchema', many=True)
+    vagasCandidatado = fields.Nested('VagasSchema', many=True)
+
+    class Meta:
+        model = Aluno
+        fields = ('nusp', 'nome', 'cpf', 'curso', 'ano', 'telefone',
+                  'email', 'data_nasc', 'endereco', 'curriculo')
+
+
+aluno_schema = AlunoSchema()
+alunos_schema = AlunoSchema(many=True)
+
+
+class EstagioSchema(ma.ModelSchema):
+    empresa = fields.Nested('EmpresaSchema', many=False)
+    aluno = fields.Nested('AlunoSchema', many=False)
+    relatorio = fields.Nested('RelatorioSchema', many=False)
+
+    class Meta:
+        model = Estagio
+        fields = ('nome', 'idEstagio', 'inicio', 'fim', 'duracaoMeses', 'aprovadoParaIniciar', 'empresaCnpj',
+                  'empresa', 'alunoNusp', 'aluno', 'relatorioAluno', 'relatorioEmpresa', 'relatorio')
+
+
+estagio_schema = EstagioSchema()
+estagios_schema = EstagioSchema(many=True)
+
+
+class EmpresaSchema(ma.ModelSchema):
+    estagios = fields.Nested('EstagiosSchema', many=True)
+    relatorios = fields.Nested('RelatoriosSchema', many=True)
+    vagasCadastradas = fields.Nested('VagasSchema', many=True)
+
+    class Meta:
+        model = Empresa
+        fields = ('cnpj', 'nome', 'email', 'endereco',
+                  'valores', 'dataCadastro')
+
+
+empresa_schema = EmpresaSchema()
+empresas_schema = EmpresaSchema(many=True)
+
+# db.create_all()
+# aluno_schema = AlunoSchema()
+# aluno = Aluno(nome="Chuck Paluhniuk", nusp=10336682)
+# db.session.add(aluno)
+# db.session.commit()
+# aluno_schema.dump(aluno)
+
+
+@app.route("/aluno", methods=["GET"])
+def get_alunos():
+    todos_alunos = Aluno.query.all()
+    result = alunos_schema.dump(todos_alunos)
+    return jsonify(result.data)
+
+
+@app.route("/aluno/<nusp>", methods=["GET"])
+def aluno_detail(nusp):
+    aluno = Aluno.query.get(nusp)
+    return aluno_schema.jsonify(aluno)
+
+
+@app.route("/aluno/<nusp>", methods=["PUT"])
+def aluno_update(nusp):
+    aluno = Aluno.query.get(nusp)
+    nusp = request.json['nusp']
+    nome = request.json['nome']
+    cpf = request.json['cpf']
+    curso = request.json['curso']
+    ano = request.json['ano']
+    telefone = request.json['telefone']
+    email = request.json['email']
+    data_nasc = request.json['data_nasc']
+    endereco = request.json['endereco']
+    curriculo = request.json['curriculo']
+
+    aluno.nusp = nusp
+    aluno.nome = nome
+    aluno.cpf = cpf
+    aluno.curso = curso
+    aluno.ano = ano
+    aluno.telefone = telefone
+    aluno.email = email
+    aluno.data_nasc = data_nasc
+    aluno.endereco = endereco
+    aluno.curriculo = curriculo
+
+    db.session.commit()
+    return aluno_schema.jsonify(aluno)
+
+
+@app.route("/aluno/estagios/<nusp>", methods=["PUT"])
+def aluno_candidatar(nusp, idVaga):
+    aluno = Aluno.query.get(nusp)
+    vaga = Vagas.query.get(idVaga)
+
+    vagasCandidato = request.json['vagasCandidato']
+    alunoCandidatado = request.json['aluno']
+
+    aluno.vagasCandidato = aluno.vagasCandidato.push(vagasCandidato)
+    vaga.alunoCandidatado = vaga.alunoCandidatado.push(alunoCandidatado)
+
+    db.session.commit()
+    return aluno_schema.jsonify(aluno)
+
+
+@app.route("/aluno/relatorio/<nusp>", methods=["PUT"])
+def aluno_enviar_relatorio(nusp, idRelatorio):
+    aluno = Aluno.query.get(nusp)
+    relatorio = request.json['relatorio']
+
+    aluno.relatorios = aluno.relatorios.push(relatorio)
+
+    db.session.commit()
+    return aluno_schema.jsonify(aluno)
+
+
+@app.route("/empresa/<cnpj>", methods=["GET"])
+def empresa_detail(cnpj):
+    empresa = Empresa.query.get(cnpj)
+    return empresa_schema.jsonify(empresa)
+
+
+@app.route("/empresa/<cnpj>", methods=["PUT"])
+def empresa_update(cnpj):
+    empresa = Empresa.query.get(cnpj)
+    cnpj = request.json['cnpj']
+    nome = request.json['nome']
+    email = request.json['email']
+    endereco = request.json['endereco']
+    valores = request.json['valores']
+
+    empresa.cnpj = cnpj
+    empresa.nome = nome
+    empresa.email = email
+    empresa.endereco = endereco
+    empresa.valores = valores
+
+    db.session.commit()
+    return empresa_schema.jsonify(empresa)
+
+
+@app.route("/empresa/relatorio/<cnpj>", methods=["PUT"])
+def empresa_enviar_relatorio(cnpj, idRelatorio):
+    empresa = Empresa.query.get(cnpj)
+    relatorio = request.json['relatorio']
+
+    empresa.relatorios = empresa.relatorios.push(relatorio)
+
+    db.session.commit()
+    return empresa_schema.jsonify(empresa)
+
+
+@app.route("/empresa/cadastrarVaga/<cnpj>", methods=["POST"])
+def add_vaga(cnpj, nome):
+    empresa = Empresa.query.get(cnpj)
+    nome = request.json['nome']
+    empresaVaga = request.json['empresa']
+
+    nova_vaga = Vagas(nome, empresaVaga)
+    empresa.vagasCadastradas = empresa.vagasCadastradas.push(nova_vaga)
+
+    db.session.add(nova_vaga)
+    db.session.commit()
+
+    return jsonify(nova_vaga)
+
+
+# @app.route("/empresa/aprovarRejeitar/<cnpj>/<nusp>", methods=[""])
+# def aprovar_rejeitar(cnpj, nusp, idVaga, aprovacao):
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
