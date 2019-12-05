@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from marshmallow import fields
 import os
+import json
 
 
 app = Flask(__name__)
@@ -28,9 +29,7 @@ class Aluno(Base):
     email = db.Column(db.String(40), unique=True)
     data_nasc = db.Column(db.DateTime)
     endereco = db.Column(db.String(50))
-    curriculo = db.Column(db.text)
-
-    # listas = db.relationship("ItemLista", back_populates="item")
+    curriculo = db.Column(db.String(500))
 
     # estagios
     # relatorios
@@ -40,6 +39,14 @@ class Aluno(Base):
         self.nome = nome
         self.nusp = nusp
 
+    def to_dict(self):
+        response = {
+            "nusp": self.nusp,
+            "nome": self.nome
+        }
+
+        return response
+
 
 class Empresa(Base):
     __tablename__ = 'empresas'
@@ -47,10 +54,8 @@ class Empresa(Base):
     nome = db.Column(db.String(200))
     email = db.Column(db.String(40), unique=True)
     endereco = db.Column(db.String(50))
-    valores = db.Column(db.text)
+    valores = db.Column(db.String(500))
     dataCadastro = db.Column(db.DateTime)
-
-    # listas = db.relationship("ItemLista", back_populates="item")
 
     # estagios
     # relatorios
@@ -74,17 +79,18 @@ class Estagio(Base):
     fim = db.Column(db.DateTime)
     duracaoMeses = db.Column(db.Integer)
     aprovadoParaIniciar = db.Column(db.Boolean)
-    empresaCnpj = db.Column(db.Integer, db.ForeignKey(
-        'empresa.cnpj'), primary_key=True)
-    empresa = db.relationship("Empresa", back_populates="estagios")
-    alunoNusp = db.Column(db.Integer, db.ForeignKey(
-        'aluno.nusp'), primary_key=True)
-    aluno = db.relationship("Aluno", back_populates="estagios")
-    relatorioAluno = db.Column(db.Integer, db.ForeignKey(
-        'relatorio.idRelatorio'), primary_key=True)
-    relatorioEmpresa = db.Column(db.Integer, db.ForeignKey(
-        'relatorio.idRelatorio'), primary_key=True)
-    relatorio = db.relationship("Relatorio", back_populates="estagios")
+
+    # empresaCnpj = db.Column(db.Integer, db.ForeignKey(
+    #     'empresa.cnpj'), primary_key=True)
+    # empresa = db.relationship("Empresa", back_populates="estagios")
+    # alunoNusp = db.Column(db.Integer, db.ForeignKey(
+    #     'aluno.nusp'), primary_key=True)
+    # aluno = db.relationship("Aluno", back_populates="estagios")
+    # relatorioAluno = db.Column(db.Integer, db.ForeignKey(
+    #     'relatorio.idRelatorio'), primary_key=True)
+    # relatorioEmpresa = db.Column(db.Integer, db.ForeignKey(
+    #     'relatorio.idRelatorio'), primary_key=True)
+    # relatorio = db.relationship("Relatorio", back_populates="estagios")
 
     def __init__(self, nome, idEstagio):
         self.nome = nome
@@ -97,25 +103,26 @@ class Vagas(Base):
     nome = db.Column(db.String(200))
     idVaga = db.Column(db.Integer, primary_key=True)
     area = db.Column(db.String(50))
-    beneficios = db.Column(db.text)
+    beneficios = db.Column(db.String(500))
     remuneracao = db.Column(db.String(20))
-    requisitos = db.Column(db.text)
-    etapasProc = db.Column(db.text)
-    descricao = db.Column(db.text)
+    requisitos = db.Column(db.String(500))
+    etapasProc = db.Column(db.String(500))
+    descricao = db.Column(db.String(500))
     duracaoMeses = db.Column(db.Integer)
     aprovadaParaDivulgar = db.Column(db.Boolean)
     dataCadastro = db.Column(db.DateTime)
-    empresaCnpj = db.Column(db.Integer, db.ForeignKey(
-        'empresa.cnpj'), primary_key=True)
-    empresa = db.relationship("Empresa", back_populates="vagas")
-    alunoNusp = db.Column(db.Integer, db.ForeignKey(
-        'aluno.nusp'), primary_key=True)
-    aluno = db.relationship("Aluno", back_populates="vagas")
+    nomeEmpresa = db.Column(db.String(200))
 
-    def __init__(self, nome, idVaga, empresa):
+    # empresaCnpj = db.Column(db.Integer, db.ForeignKey(
+    #     'empresa.cnpj'), primary_key=True)
+    # empresa = db.relationship("Empresa", back_populates="vagas")
+    # alunoNusp = db.Column(db.Integer, db.ForeignKey(
+    #     'aluno.nusp'), primary_key=True)
+    # aluno = db.relationship("Aluno", back_populates="vagas")
+
+    def __init__(self, nome):
         self.nome = nome
-        self.idVaga = idVaga
-        self.empresa = empresa
+        # self.empresa = empresa
         self.dataCadastro = datetime.now()
 
 
@@ -125,13 +132,13 @@ class Relatorio(Base):
     nota = db.Column(db.Integer)
     dataSubmissao = db.Column(db.DateTime)
     estagioId = db.Column(db.Integer, db.ForeignKey('estagio.idEstagio'))
-    estagio = db.relationship("Estagio", back_populates="relatorios")
-    empresaCnpj = db.Column(db.Integer, db.ForeignKey(
-        'empresa.cnpj'), primary_key=True)
-    empresa = db.relationship("Empresa", back_populates="relatorios")
-    alunoNusp = db.Column(db.Integer, db.ForeignKey(
-        'aluno.nusp'), primary_key=True)
-    aluno = db.relationship("Aluno", back_populates="relatorios")
+    # estagio = db.relationship("Estagio", back_populates="relatorios")
+    # empresaCnpj = db.Column(db.Integer, db.ForeignKey(
+    #     'empresa.cnpj'), primary_key=True)
+    # empresa = db.relationship("Empresa", back_populates="relatorios")
+    # alunoNusp = db.Column(db.Integer, db.ForeignKey(
+    #     'aluno.nusp'), primary_key=True)
+    # aluno = db.relationship("Aluno", back_populates="relatorios")
 
     def __init__(self, idRelatorio):
         self.idRelatorio = idRelatorio
@@ -145,8 +152,6 @@ class Professor(Base):
     email = db.Column(db.String(40), unique=True)
     dataCadastro = db.Column(db.DateTime)
 
-    # listas = db.relationship("ItemLista", back_populates="item")
-
     # estagios
     # estagios pendentes
     # relatorios
@@ -159,10 +164,10 @@ class Professor(Base):
 
 
 class ProfessorSchema(ma.ModelSchema):
-    estagios = fields.Nested('EstagiosSchema', many=True)
-    estagiosPendentes = fields.Nested('EstagiosSchema', many=True)
-    relatorios = fields.Nested('RelatoriosSchema', many=True)
-    vagasPendentes = fields.Nested('VagasSchema', many=True)
+    # estagios = fields.Nested('EstagiosSchema', many=True)
+    # estagiosPendentes = fields.Nested('EstagiosSchema', many=True)
+    # relatorios = fields.Nested('RelatoriosSchema', many=True)
+    # vagasPendentes = fields.Nested('VagasSchema', many=True)
 
     class Meta:
         model = Professor
@@ -174,14 +179,14 @@ professor_schema = ProfessorSchema(many=True)
 
 
 class RelatorioSchema(ma.ModelSchema):
-    empresa = fields.Nested('EmpresaSchema', many=False)
-    aluno = fields.Nested('AlunoSchema', many=False)
-    estagio = fields.Nested('EstagioSchema', many=False)
+    # empresa = fields.Nested('EmpresaSchema', many=False)
+    # aluno = fields.Nested('AlunoSchema', many=False)
+    # estagio = fields.Nested('EstagioSchema', many=False)
 
     class Meta:
         model = Relatorio
-        fields = ('idRelatorio', 'nota', 'dataSubmissao', 'estagioId',
-                  'estagio', 'empresaCnpj', 'empresa', 'alunoNusp', 'aluno')
+        fields = ('idRelatorio', 'nota', 'dataSubmissao', 'estagioId')
+        #   'estagio', 'empresaCnpj', 'empresa', 'alunoNusp', 'aluno')
 
 
 relatorio_schema = RelatorioSchema()
@@ -189,13 +194,14 @@ relatorios_schema = RelatorioSchema(many=True)
 
 
 class VagaSchema(ma.ModelSchema):
-    empresa = fields.Nested('EmpresaSchema', many=False)
-    alunos = fields.Nested('AlunoSchema', many=True)
+    # empresa = fields.Nested('EmpresaSchema', many=False)
+    # alunos = fields.Nested('AlunoSchema', many=True)
 
     class Meta:
         model = Vagas
         fields = ('nome', 'idVaga', 'area', 'beneficios', 'remuneracao', 'requisitos', 'etapasProc', 'descricao',
-                  'duracaoMeses', 'aprovadaParaDivulgar', 'dataCadastro', 'empresaCnpj', 'empresa', 'alunoNusp', 'aluno')
+                  'duracaoMeses', 'aprovadaParaDivulgar', 'dataCadastro')
+        #   , 'empresaCnpj', 'empresa', 'alunoNusp', 'aluno')
 
 
 vaga_schema = VagaSchema()
@@ -203,9 +209,9 @@ vagas_schema = VagaSchema(many=True)
 
 
 class AlunoSchema(ma.ModelSchema):
-    estagios = fields.Nested('EstagiosSchema', many=True)
-    relatorios = fields.Nested('RelatoriosSchema', many=True)
-    vagasCandidatado = fields.Nested('VagasSchema', many=True)
+    # estagios = fields.Nested('EstagiosSchema', many=True)
+    # relatorios = fields.Nested('RelatoriosSchema', many=True)
+    # vagasCandidatado = fields.Nested('VagasSchema', many=True)
 
     class Meta:
         model = Aluno
@@ -218,14 +224,15 @@ alunos_schema = AlunoSchema(many=True)
 
 
 class EstagioSchema(ma.ModelSchema):
-    empresa = fields.Nested('EmpresaSchema', many=False)
-    aluno = fields.Nested('AlunoSchema', many=False)
-    relatorio = fields.Nested('RelatorioSchema', many=False)
+    # empresa = fields.Nested('EmpresaSchema', many=False)
+    # aluno = fields.Nested('AlunoSchema', many=False)
+    # relatorio = fields.Nested('RelatorioSchema', many=False)
 
     class Meta:
         model = Estagio
-        fields = ('nome', 'idEstagio', 'inicio', 'fim', 'duracaoMeses', 'aprovadoParaIniciar', 'empresaCnpj',
-                  'empresa', 'alunoNusp', 'aluno', 'relatorioAluno', 'relatorioEmpresa', 'relatorio')
+        fields = ('nome', 'idEstagio', 'inicio', 'fim',
+                  'duracaoMeses', 'aprovadoParaIniciar')
+        # 'empresaCnpj','empresa', 'alunoNusp', 'aluno', 'relatorioAluno', 'relatorioEmpresa', 'relatorio')
 
 
 estagio_schema = EstagioSchema()
@@ -233,9 +240,9 @@ estagios_schema = EstagioSchema(many=True)
 
 
 class EmpresaSchema(ma.ModelSchema):
-    estagios = fields.Nested('EstagiosSchema', many=True)
-    relatorios = fields.Nested('RelatoriosSchema', many=True)
-    vagasCadastradas = fields.Nested('VagasSchema', many=True)
+    # estagios = fields.Nested('EstagiosSchema', many=True)
+    # relatorios = fields.Nested('RelatoriosSchema', many=True)
+    # vagasCadastradas = fields.Nested('VagasSchema', many=True)
 
     class Meta:
         model = Empresa
@@ -257,8 +264,12 @@ empresas_schema = EmpresaSchema(many=True)
 @app.route("/aluno", methods=["GET"])
 def get_alunos():
     todos_alunos = Aluno.query.all()
-    result = alunos_schema.dump(todos_alunos)
-    return jsonify(result.data)
+    dict_result = {}
+    for entry in todos_alunos:
+        aluno_dict = entry.to_dict()
+        dict_result[aluno_dict['nusp']] = aluno_dict
+
+    return json.loads(json.dumps(dict_result))
 
 
 @app.route("/aluno/<nusp>", methods=["GET"])
@@ -296,30 +307,30 @@ def aluno_update(nusp):
     return aluno_schema.jsonify(aluno)
 
 
-@app.route("/aluno/estagios/<nusp>", methods=["PUT"])
-def aluno_candidatar(nusp, idVaga):
-    aluno = Aluno.query.get(nusp)
-    vaga = Vagas.query.get(idVaga)
+# @app.route("/aluno/estagios/<nusp>", methods=["PUT"])
+# def aluno_candidatar(nusp, idVaga):
+#     aluno = Aluno.query.get(nusp)
+#     vaga = Vagas.query.get(idVaga)
 
-    vagasCandidato = request.json['vagasCandidato']
-    alunoCandidatado = request.json['aluno']
+#     vagasCandidato = request.json['vagasCandidato']
+#     alunoCandidatado = request.json['aluno']
 
-    aluno.vagasCandidato = aluno.vagasCandidato.push(vagasCandidato)
-    vaga.alunoCandidatado = vaga.alunoCandidatado.push(alunoCandidatado)
+#     aluno.vagasCandidato = aluno.vagasCandidato.push(vagasCandidato)
+#     vaga.alunoCandidatado = vaga.alunoCandidatado.push(alunoCandidatado)
 
-    db.session.commit()
-    return aluno_schema.jsonify(aluno)
+#     db.session.commit()
+#     return aluno_schema.jsonify(aluno)
 
 
-@app.route("/aluno/relatorio/<nusp>", methods=["PUT"])
-def aluno_enviar_relatorio(nusp, idRelatorio):
-    aluno = Aluno.query.get(nusp)
-    relatorio = request.json['relatorio']
+# @app.route("/aluno/relatorio/<nusp>", methods=["PUT"])
+# def aluno_enviar_relatorio(nusp, idRelatorio):
+#     aluno = Aluno.query.get(nusp)
+#     relatorio = request.json['relatorio']
 
-    aluno.relatorios = aluno.relatorios.push(relatorio)
+#     aluno.relatorios = aluno.relatorios.push(relatorio)
 
-    db.session.commit()
-    return aluno_schema.jsonify(aluno)
+#     db.session.commit()
+#     return aluno_schema.jsonify(aluno)
 
 
 @app.route("/empresa/<cnpj>", methods=["GET"])
@@ -347,30 +358,43 @@ def empresa_update(cnpj):
     return empresa_schema.jsonify(empresa)
 
 
-@app.route("/empresa/relatorio/<cnpj>", methods=["PUT"])
-def empresa_enviar_relatorio(cnpj, idRelatorio):
-    empresa = Empresa.query.get(cnpj)
-    relatorio = request.json['relatorio']
+# @app.route("/empresa/relatorio/<cnpj>", methods=["PUT"])
+# def empresa_enviar_relatorio(cnpj, idRelatorio):
+#     empresa = Empresa.query.get(cnpj)
+#     relatorio = request.json['relatorio']
 
-    empresa.relatorios = empresa.relatorios.push(relatorio)
+#     empresa.relatorios = empresa.relatorios.push(relatorio)
 
-    db.session.commit()
-    return empresa_schema.jsonify(empresa)
+#     db.session.commit()
+#     return empresa_schema.jsonify(empresa)
 
 
-@app.route("/empresa/cadastrarVaga/<cnpj>", methods=["POST"])
-def add_vaga(cnpj, nome):
-    empresa = Empresa.query.get(cnpj)
+# @app.route("/empresa/cadastrarVaga/<cnpj>", methods=["POST"])
+# def add_vaga(cnpj, nome):
+#     empresa = Empresa.query.get(cnpj)
+#     nome = request.json['nome']
+#     empresaVaga = request.json['empresa']
+
+#     nova_vaga = Vagas(nome, empresaVaga)
+#     empresa.vagasCadastradas = empresa.vagasCadastradas.push(nova_vaga)
+
+#     db.session.add(nova_vaga)
+#     db.session.commit()
+
+#     return jsonify(nova_vaga)
+
+@app.route("/aluno/criar", methods=["POST"])
+def add_aluno():
     nome = request.json['nome']
-    empresaVaga = request.json['empresa']
+    nusp = request.json['nusp']
 
-    nova_vaga = Vagas(nome, empresaVaga)
-    empresa.vagasCadastradas = empresa.vagasCadastradas.push(nova_vaga)
+    novo_aluno = Aluno(nome, nusp)
 
-    db.session.add(nova_vaga)
+    db.session.add(novo_aluno)
+
     db.session.commit()
-
-    return jsonify(nova_vaga)
+    response = novo_aluno.to_dict()
+    return response
 
 
 # @app.route("/empresa/aprovarRejeitar/<cnpj>/<nusp>", methods=[""])
