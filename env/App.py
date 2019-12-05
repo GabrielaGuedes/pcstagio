@@ -18,7 +18,7 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
 
-class Aluno(Base):
+class Aluno(db.Model):
     __tablename__ = 'alunos'
     nusp = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(200))
@@ -44,18 +44,17 @@ class Aluno(Base):
             "nusp": self.nusp,
             "nome": self.nome
         }
-
         return response
 
 
-class Empresa(Base):
+class Empresa(db.Model):
     __tablename__ = 'empresas'
     cnpj = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(200))
     email = db.Column(db.String(40), unique=True)
     endereco = db.Column(db.String(50))
     valores = db.Column(db.String(500))
-    dataCadastro = db.Column(db.DateTime)
+    #dataCadastro = db.Column(db.DateTime)
 
     # estagios
     # relatorios
@@ -64,14 +63,23 @@ class Empresa(Base):
     def __init__(self, nome, cnpj):
         self.nome = nome
         self.cnpj = cnpj
-        self.dataCadastro = datetime.now()
+
+    def to_dict(self):
+        response = {
+            "nome": self.nome,
+            "cnpj": self.cnpj,
+            "email":self.email,
+            "endereco":self.email,
+            "valores":self.valores
+        }
+        return response
 
     def adicionar(self):
         db.session.add(self)
         db.session.commit()
 
 
-class Estagio(Base):
+class Estagio(db.Model):
     __tablename__ = 'estagios'
     nome = db.Column(db.String(200))
     idEstagio = db.Column(db.Integer, primary_key=True)
@@ -98,7 +106,7 @@ class Estagio(Base):
         self.inicio = datetime.now()
 
 
-class Vagas(Base):
+class Vagas(db.Model):
     __tablename__ = 'vagas'
     nome = db.Column(db.String(200))
     idVaga = db.Column(db.Integer, primary_key=True)
@@ -110,7 +118,7 @@ class Vagas(Base):
     descricao = db.Column(db.String(500))
     duracaoMeses = db.Column(db.Integer)
     aprovadaParaDivulgar = db.Column(db.Boolean)
-    dataCadastro = db.Column(db.DateTime)
+    dataCadastro = db.Column(db.String(500))
     nomeEmpresa = db.Column(db.String(200))
 
     # empresaCnpj = db.Column(db.Integer, db.ForeignKey(
@@ -123,10 +131,10 @@ class Vagas(Base):
     def __init__(self, nome):
         self.nome = nome
         # self.empresa = empresa
-        self.dataCadastro = datetime.now()
+        #self.dataCadastro = datetime.now()
 
 
-class Relatorio(Base):
+class Relatorio(db.Model):
     __tablename__ = 'relatorios'
     idRelatorio = db.Column(db.Integer, primary_key=True)
     nota = db.Column(db.Integer)
@@ -145,7 +153,7 @@ class Relatorio(Base):
         self.dataSubmissao = datetime.now()
 
 
-class Professor(Base):
+class Professor(db.Model):
     __tablename__ = 'professores'
     cpf = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(200))
@@ -332,12 +340,34 @@ def aluno_update(nusp):
 #     db.session.commit()
 #     return aluno_schema.jsonify(aluno)
 
+@app.route("/empresa", methods=["GET"])
+def get_empresas():
+    todas_empresas=Empresa.query.all()
+    dict_result={}
+    for entry in todas_empresas:
+        empresa_dict=entry.to_dict()
+        dict_result[empresa_dict['cnpj']]=empresa_dict
+    
+    return json.loads(json.dumps(dict_result))
 
 @app.route("/empresa/<cnpj>", methods=["GET"])
 def empresa_detail(cnpj):
     empresa = Empresa.query.get(cnpj)
-    return empresa_schema.jsonify(empresa)
+    response=empresa.to_dict()
+    return response
 
+@app.route("/empresa/criar", methods=["POST"])
+def add_empresa():
+    nome=request.json['nome']
+    cnpj=request.json['cnpj']
+
+    nova_empresa=Empresa(nome, cnpj)
+
+    db.session.add(nova_empresa)
+
+    db.session.commit()
+    response=nova_empresa.to_dict()
+    return response
 
 @app.route("/empresa/<cnpj>", methods=["PUT"])
 def empresa_update(cnpj):
