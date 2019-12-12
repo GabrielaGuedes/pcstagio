@@ -18,7 +18,7 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
 
-class Aluno(Base):
+class Aluno(db.Model):
     __tablename__ = 'alunos'
     nusp = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(200))
@@ -27,7 +27,7 @@ class Aluno(Base):
     ano = db.Column(db.Integer)
     telefone = db.Column(db.String(10))
     email = db.Column(db.String(40), unique=True)
-    data_nasc = db.Column(db.DateTime)
+    data_nasc = db.Column(db.String(10))
     endereco = db.Column(db.String(50))
     curriculo = db.Column(db.String(500))
 
@@ -42,13 +42,21 @@ class Aluno(Base):
     def to_dict(self):
         response = {
             "nusp": self.nusp,
-            "nome": self.nome
+            "nome": self.nome,
+            "cpf": self.cpf,
+            "curso": self.curso,
+            "ano": self.ano,
+            "telefone": self.telefone,
+            "email": self.email,
+            "data_nasc": self.data_nasc,
+            "endereco": self.endereco,
+            "curriculo": self.curriculo
         }
 
         return response
 
 
-class Empresa(Base):
+class Empresa(db.Model):
     __tablename__ = 'empresas'
     cnpj = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(200))
@@ -71,7 +79,7 @@ class Empresa(Base):
         db.session.commit()
 
 
-class Estagio(Base):
+class Estagio(db.Model):
     __tablename__ = 'estagios'
     nome = db.Column(db.String(200))
     idEstagio = db.Column(db.Integer, primary_key=True)
@@ -98,7 +106,7 @@ class Estagio(Base):
         self.inicio = datetime.now()
 
 
-class Vagas(Base):
+class Vagas(db.Model):
     __tablename__ = 'vagas'
     nome = db.Column(db.String(200))
     idVaga = db.Column(db.Integer, primary_key=True)
@@ -126,7 +134,7 @@ class Vagas(Base):
         self.dataCadastro = datetime.now()
 
 
-class Relatorio(Base):
+class Relatorio(db.Model):
     __tablename__ = 'relatorios'
     idRelatorio = db.Column(db.Integer, primary_key=True)
     nota = db.Column(db.Integer)
@@ -145,7 +153,7 @@ class Relatorio(Base):
         self.dataSubmissao = datetime.now()
 
 
-class Professor(Base):
+class Professor(db.Model):
     __tablename__ = 'professores'
     cpf = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(200))
@@ -214,7 +222,6 @@ class AlunoSchema(ma.ModelSchema):
     # vagasCandidatado = fields.Nested('VagasSchema', many=True)
 
     class Meta:
-        model = Aluno
         fields = ('nusp', 'nome', 'cpf', 'curso', 'ano', 'telefone',
                   'email', 'data_nasc', 'endereco', 'curriculo')
 
@@ -275,34 +282,36 @@ def get_alunos():
 @app.route("/aluno/<nusp>", methods=["GET"])
 def aluno_detail(nusp):
     aluno = Aluno.query.get(nusp)
-    return aluno_schema.jsonify(aluno)
+    response = aluno.to_dict()
+    return response
 
 
 @app.route("/aluno/<nusp>", methods=["PUT"])
 def aluno_update(nusp):
     aluno = Aluno.query.get(nusp)
-    nusp = request.json['nusp']
-    nome = request.json['nome']
-    cpf = request.json['cpf']
-    curso = request.json['curso']
-    ano = request.json['ano']
-    telefone = request.json['telefone']
-    email = request.json['email']
-    data_nasc = request.json['data_nasc']
-    endereco = request.json['endereco']
-    curriculo = request.json['curriculo']
+    aluno.nusp = request.json['nusp']
+    aluno.nome = request.json['nome']
+    aluno.cpf = request.json['cpf']
+    aluno.curso = request.json['curso']
+    aluno.ano = request.json['ano']
+    aluno.telefone = request.json['telefone']
+    aluno.email = request.json['email']
+    aluno.data_nasc = request.json['data_nasc']
+    aluno.endereco = request.json['endereco']
+    aluno.curriculo = request.json['curriculo']
 
-    aluno.nusp = nusp
-    aluno.nome = nome
-    aluno.cpf = cpf
-    aluno.curso = curso
-    aluno.ano = ano
-    aluno.telefone = telefone
-    aluno.email = email
-    aluno.data_nasc = data_nasc
-    aluno.endereco = endereco
-    aluno.curriculo = curriculo
+    # aluno.nusp = nusp
+    # aluno.nome = nome
+    # aluno.cpf = cpf
+    # aluno.curso = curso
+    # aluno.ano = ano
+    # aluno.telefone = telefone
+    # aluno.email = email
+    # aluno.data_nasc = data_nasc
+    # aluno.endereco = endereco
+    # aluno.curriculo = curriculo
 
+    # db.session.add(aluno)
     db.session.commit()
     return aluno_schema.jsonify(aluno)
 
